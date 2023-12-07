@@ -10,7 +10,7 @@ v.print_discovered_objects()
 controller = "controller_1"
 
 if len(sys.argv) == 1:
-    interval = 1/25
+    interval = 1/10
 elif len(sys.argv) == 2:
     interval = 1/float(sys.argv[1])
 else:
@@ -20,7 +20,9 @@ else:
 def main():
     start = time.time()
 
-    curr_euler = v.devices[controller].get_pose_euler()
+    while ((curr_euler := v.devices[controller].get_pose_euler()) is None):
+        print("\"" + controller + "\" lost")
+        time.sleep(1)
     curr_pos = [curr_euler[0], curr_euler[2]]
     curr_yaw = curr_euler[4]
     dist = math.dist(start_pos, curr_pos)
@@ -45,9 +47,20 @@ if __name__ == '__main__':
 
         begin = time.time()
 
-        start_euler = v.devices[controller].get_pose_euler()
-        start_pos = [start_euler[0], start_euler[2]]
-        start_yaw = start_euler[4]
+        try:
+            start_euler = v.devices[controller].get_pose_euler()
+        except KeyError:
+            print("No controllers found")
+            f.close()
+            sys.exit(1)
+
+        try:
+            start_pos = [start_euler[0], start_euler[2]]
+            start_yaw = start_euler[4]
+        except TypeError:
+            print("\"" + controller + "\" not found")
+            f.close()
+            sys.exit(1)
 
         header = ['TIME (s)', 'ABS_X (m)', 'ABS_Y (m)', 'ABS_YAW (deg)', 'REL_X (m)', 'REL_Y (m)', 'REL_YAW (deg)']
         print('{:<10s}\t{:<10s}\t{:<10s}\t{:<10s}\t{:<10s}\t{:<10s}\t{:<10s}'.format(*header))
