@@ -30,7 +30,7 @@ def main():
     rel_yaw = curr_yaw - start_yaw
 
     row = [start - begin, curr_pos[0], curr_pos[1], curr_yaw, rel_pos[0], rel_pos[1], rel_yaw]
-    print('{:.3f}\t{:.3f}\t{:.3f}\t{:.3f}\t{:.3f}\t{:.3f}\t{:.3f}'.format(*row))
+    print(f"{row[0]:<15.3f}{row[1]:<15.3f}{row[2]:<15.3f}{row[3]:<15.1f}{row[4]:<15.3f}{row[5]:<15.3f}{row[6]:<15.1f}")
 
     f.write(','.join(map(str, row)) + '\n')
 
@@ -63,7 +63,7 @@ if __name__ == '__main__':
             sys.exit(1)
 
         header = ['TIME (s)', 'ABS_X (m)', 'ABS_Y (m)', 'ABS_YAW (deg)', 'REL_X (m)', 'REL_Y (m)', 'REL_YAW (deg)']
-        print('{:<10s}\t{:<10s}\t{:<10s}\t{:<10s}\t{:<10s}\t{:<10s}\t{:<10s}'.format(*header))
+        print(f"{header[0]:<15}{header[1]:<15}{header[2]:<15}{header[3]:<15}{header[4]:<15}{header[5]:<15}{header[6]:<15}")
         f.write(','.join(map(str, header)) + '\n')
 
         while(True):
